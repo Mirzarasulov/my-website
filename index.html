@@ -1,891 +1,252 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <title>Game Market</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    * {
-      margin: 0; padding: 0; box-sizing: border-box;
-    }
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #0e0e0e;
-      color: white;
-      min-height: 100vh;
-      overflow-x: hidden;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes, viewport-fit=cover">
     
-    /* Навигация */
-    .nav-buttons {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      padding: 20px;
-      background: rgba(30, 30, 30, 0.95);
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+    <!-- ===== LINK PREVIEW (TELEGRAM, FACEBOOK, WHATSAPP) ===== -->
+    <title>A & X | Свадебное приглашение</title>
     
-    button {
-      padding: 12px 25px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      background: linear-gradient(90deg, #6f42c1, #007bff);
-      color: white;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      min-width: 120px;
-    }
+    <!-- Основные мета-теги для превью -->
+    <meta name="description" content="A & X никоҳ тўйига таклифнома. 16 май 2026, соат 12:00. Куёвнинг уйи ва Келиннинг уйи манзиллари билан танишинг.">
+    <meta name="keywords" content="свадьба, приглашение, никоҳ, тўй, A and X, taklifnoma">
+    <meta name="author" content="A & X">
     
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3);
-    }
+    <!-- Open Graph мета-теги (для Telegram, Facebook, WhatsApp) -->
+    <meta property="og:title" content="A & X | Свадебное приглашение">
+    <meta property="og:description" content="✨ Марҳамат, сизни A & X никоҳ тўйига таклиф қиламиз! ✨ Сана: 16 май 2026, соат 12:00. Манзиллар ва тафсилотлар сайтда.">
+    <meta property="og:image" content="https://i.postimg.cc/5NvzBMZm/k21k2.webp">
+    <meta property="og:image:width" content="800">
+    <meta property="og:image:height" content="800">
+    <meta property="og:url" content="https://your-domain.com/index.html">
+    <meta property="og:type" content="website">
     
-    .back-button {
-      background: #d9534f;
-    }
+    <!-- Twitter Card мета-теги -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="A & X | Свадебное приглашение">
+    <meta name="twitter:description" content="✨ Марҳамат, сизни A & X никоҳ тўйига таклиф қиламиз! ✨">
+    <meta name="twitter:image" content="https://i.postimg.cc/5NvzBMZm/k21k2.webp">
     
-    .back-button:hover {
-      background: #c9302c;
-    }
-    
-    /* Главный контейнер */
-    .container {
-      padding: 20px;
-      max-width: 1200px;
-      margin: 0 auto;
-    }
-    
-    /* Список игр */
-    .game-list {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-    
-    .game {
-      background: linear-gradient(145deg, #1c1c1c, #2a2a2a);
-      padding: 15px;
-      border-radius: 15px;
-      text-align: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 1px solid #333;
-    }
-    
-    .game:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 20px rgba(0, 123, 255, 0.2);
-      border-color: #6f42c1;
-    }
-    
-    .game img {
-      width: 100%;
-      height: 120px;
-      object-fit: cover;
-      border-radius: 10px;
-      margin-bottom: 10px;
-      border: 2px solid #444;
-    }
-    
-    .game h3 {
-      font-size: 16px;
-      margin-bottom: 5px;
-    }
-    
-    .game-price {
-      color: #00ff88;
-      font-weight: bold;
-      font-size: 14px;
-    }
-    
-    /* Детали игры */
-    .game-detail {
-      display: none;
-      animation: fadeIn 0.3s ease;
-    }
-    
-    .game-detail-content {
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    
-    .game-detail img {
-      width: 100%;
-      max-height: 300px;
-      object-fit: cover;
-      border-radius: 15px;
-      margin-bottom: 20px;
-    }
-    
-    .game-detail h2 {
-      color: #6f42c1;
-      margin-bottom: 15px;
-      font-size: 24px;
-    }
-    
-    .game-detail p {
-      line-height: 1.6;
-      color: #ccc;
-      margin-bottom: 20px;
-    }
-    
-    /* Информация о продавце */
-    .seller-info {
-      background: rgba(28, 28, 28, 0.8);
-      padding: 15px;
-      border-radius: 10px;
-      margin: 20px 0;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      border: 1px solid #444;
-    }
-    
-    .seller-info:hover {
-      background: rgba(40, 40, 40, 0.8);
-      border-color: #6f42c1;
-    }
-    
-    .seller-info-content {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    
-    .seller-info-left {
-      display: flex;
-      align-items: center;
-      gap: 15px;
-    }
-    
-    .avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 2px solid #6f42c1;
-    }
-    
-    .rating {
-      color: #ffcc00;
-      font-size: 14px;
-    }
-    
-    .seller-name {
-      font-weight: bold;
-      color: #fff;
-    }
-    
-    .price {
-      font-size: 22px;
-      font-weight: bold;
-      color: #00ff88;
-      text-shadow: 0 0 10px rgba(0, 255, 136, 0.3);
-    }
-    
-    /* Детали продавца */
-    .seller-description {
-      display: none;
-      background: linear-gradient(145deg, #1c1c1c, #2a2a2a);
-      padding: 25px;
-      border-radius: 15px;
-      margin-top: 20px;
-      border: 1px solid #6f42c1;
-      animation: slideIn 0.3s ease;
-    }
-    
-    .seller-stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      margin: 20px 0;
-    }
-    
-    .stat-item {
-      background: rgba(0, 123, 255, 0.1);
-      padding: 15px;
-      border-radius: 10px;
-      text-align: center;
-    }
-    
-    .stat-value {
-      font-size: 24px;
-      font-weight: bold;
-      color: #00ff88;
-    }
-    
-    .stat-label {
-      font-size: 12px;
-      color: #aaa;
-      margin-top: 5px;
-    }
-    
-    .action-buttons {
-      display: flex;
-      gap: 15px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 25px;
-    }
-    
-    .action-buttons button {
-      flex: 1;
-      min-width: 150px;
-    }
-    
-    /* Личный кабинет */
-    .profile {
-      display: none;
-      max-width: 600px;
-      margin: 0 auto;
-      animation: fadeIn 0.3s ease;
-    }
-    
-    .profile-header {
-      text-align: center;
-      padding: 30px 20px;
-      background: linear-gradient(145deg, #1c1c1c, #2a2a2a);
-      border-radius: 15px;
-      margin-bottom: 20px;
-    }
-    
-    .user-avatar {
-      width: 100px;
-      height: 100px;
-      border-radius: 50%;
-      object-fit: cover;
-      border: 3px solid #6f42c1;
-      margin-bottom: 15px;
-    }
-    
-    .user-info {
-      margin-bottom: 20px;
-    }
-    
-    .balance-display {
-      background: linear-gradient(90deg, #6f42c1, #007bff);
-      padding: 20px;
-      border-radius: 10px;
-      text-align: center;
-      margin: 20px 0;
-    }
-    
-    .balance-amount {
-      font-size: 32px;
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
-    }
-    
-    .profile-sections {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      margin-top: 30px;
-    }
-    
-    .section-card {
-      background: rgba(40, 40, 40, 0.8);
-      padding: 20px;
-      border-radius: 10px;
-      border: 1px solid #444;
-      transition: all 0.3s ease;
-    }
-    
-    .section-card:hover {
-      border-color: #6f42c1;
-      transform: translateY(-3px);
-    }
-    
-    .section-card h3 {
-      color: #6f42c1;
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    
-    /* Чат */
-    .chat-container {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.9);
-      z-index: 1000;
-    }
-    
-    .chat-box {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 90%;
-      max-width: 500px;
-      background: #1c1c1c;
-      border-radius: 15px;
-      padding: 20px;
-      border: 2px solid #6f42c1;
-    }
-    
-    .chat-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 15px;
-      border-bottom: 1px solid #444;
-    }
-    
-    .chat-messages {
-      height: 300px;
-      overflow-y: auto;
-      padding: 15px;
-      background: rgba(40, 40, 40, 0.5);
-      border-radius: 10px;
-      margin-bottom: 15px;
-    }
-    
-    .message {
-      margin-bottom: 10px;
-      padding: 10px 15px;
-      border-radius: 10px;
-      max-width: 80%;
-    }
-    
-    .message.user {
-      background: linear-gradient(90deg, #6f42c1, #007bff);
-      margin-left: auto;
-    }
-    
-    .message.seller {
-      background: rgba(40, 40, 40, 0.8);
-      border: 1px solid #444;
-    }
-    
-    .chat-input {
-      display: flex;
-      gap: 10px;
-    }
-    
-    .chat-input input {
-      flex: 1;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid #444;
-      background: rgba(40, 40, 40, 0.8);
-      color: white;
-    }
-    
-    /* Поддержка */
-    .support-button {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      background: linear-gradient(90deg, #6f42c1, #007bff);
-      border-radius: 50%;
-      width: 60px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 15px rgba(111, 66, 193, 0.4);
-      z-index: 99;
-      transition: all 0.3s ease;
-    }
-    
-    .support-button:hover {
-      transform: scale(1.1);
-      box-shadow: 0 6px 20px rgba(111, 66, 193, 0.6);
-    }
-    
-    .support-button img {
-      width: 30px;
-      height: 30px;
-    }
-    
-    /* Баланс */
-    .balance {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      background: rgba(28, 28, 28, 0.9);
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 18px;
-      font-weight: bold;
-      color: #00ff88;
-      z-index: 101;
-      border: 1px solid #444;
-    }
-    
-    /* Анимации */
-    @keyframes fadeIn {
-      from { opacity: 0; }
-      to { opacity: 1; }
-    }
-    
-    @keyframes slideIn {
-      from { transform: translateY(20px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-    
-    /* Адаптивность */
-    @media (max-width: 768px) {
-      .game-list {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-      }
-      
-      .nav-buttons {
-        flex-wrap: wrap;
-      }
-      
-      button {
-        min-width: 100px;
-        padding: 10px 15px;
-      }
-      
-      .action-buttons {
-        flex-direction: column;
-      }
-      
-      .seller-stats {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+    <link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Allura&family=Great+Vibes&family=Parisienne&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            background: url('https://i.postimg.cc/xdqLxxfw/36af8800-0a58-4ae1-adfd-58ac11117ead.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: 'Jost', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        .cloud {
+            position: fixed;
+            background: rgba(255,255,255,0.7);
+            border-radius: 1000px;
+            filter: blur(6px);
+            pointer-events: none;
+            z-index: 0;
+            animation: floatCloud 25s infinite alternate ease-in-out;
+        }
+        @keyframes floatCloud {
+            0% { transform: translateX(-8%) translateY(0%); }
+            100% { transform: translateX(8%) translateY(-4%); }
+        }
+        .cloud-1 { width: 280px; height: 110px; top: 5%; left: -8%; }
+        .cloud-2 { width: 380px; height: 140px; bottom: 8%; right: -10%; animation-duration: 35s; }
+        .cloud-3 { width: 220px; height: 90px; top: 22%; right: 5%; animation-duration: 20s; }
+        .cloud-4 { width: 320px; height: 120px; bottom: 20%; left: -5%; animation-duration: 40s; }
+        .cloud-5 { width: 180px; height: 70px; top: 65%; right: 15%; animation-duration: 28s; }
+        .cloud-6 { width: 250px; height: 100px; top: 40%; left: 10%; animation-duration: 32s; }
+
+        .star {
+            position: fixed;
+            color: rgba(255,255,220,0.8);
+            font-size: 1.3rem;
+            pointer-events: none;
+            animation: twinkle 3s infinite alternate;
+            text-shadow: 0 0 5px rgba(0,0,0,0.2);
+        }
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(0.7); }
+            100% { opacity: 0.9; transform: scale(1.1); }
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 480px;
+            width: 100%;
+            background: transparent;
+            backdrop-filter: none;
+            border-radius: 60px;
+            padding: 2.5rem 1.8rem;
+            text-align: center;
+            animation: fadeInUp 0.7s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(35px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-photo {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 0.8rem;
+            display: block;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+            border: 3px solid rgba(255, 255, 255, 0.9);
+        }
+
+        .initials {
+            font-family: 'Allura', 'Great Vibes', cursive;
+            font-size: 4.2rem;
+            background: linear-gradient(135deg, #ec0000, #000000, #ff8000);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 0.2rem;
+            letter-spacing: 0.02em;
+            text-shadow: 2px 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            letter-spacing: 0.35em;
+            text-transform: uppercase;
+            color: #000000;
+            font-weight: 500;
+            margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.15);
+            background: transparent;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin: 1.5rem 0 0.8rem;
+        }
+
+        .btn {
+            padding: 0.9rem 1.5rem;
+            border-radius: 80px;
+            font-size: 1.15rem;
+            font-weight: 600;
+            text-decoration: none;
+            text-align: center;
+            transition: all 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.35);
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff5e6;
+            box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+        }
+        
+        .btn:hover {
+            transform: translateY(-4px) scale(1.02);
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.6);
+            box-shadow: 0 16px 28px rgba(0, 0, 0, 0.2);
+        }
+        
+        .btn:active {
+            transform: scale(0.96);
+            transition: transform 0.12s;
+        }
+
+        .btn-osh, .btn-toy, .btn-choyxona {
+            background: rgba(255, 255, 255, 0.12);
+            color: #fff5e6;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.35);
+        }
+
+        .btn-icon {
+            font-size: 1.4rem;
+            filter: drop-shadow(0 1px 2px rgba(0,0,0,0.2));
+        }
+
+        .footer-text {
+            font-size: 0.7rem;
+            color: #ffe6d6;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255,240,220,0.35);
+            padding-top: 1.1rem;
+            font-weight: 450;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            background: transparent;
+        }
+
+        @media (max-width: 520px) {
+            .container { padding: 1.6rem 1.2rem; margin: 0 12px; }
+            .initials { font-size: 3.4rem; }
+            .hero-photo { width: 90px; height: 90px; }
+            .btn { font-size: 1rem; padding: 0.7rem 1rem; gap: 8px; }
+            .btn-icon { font-size: 1.2rem; }
+            .subtitle { font-size: 0.7rem; letter-spacing: 0.3em; }
+        }
+    </style>
 </head>
 <body>
-  <!-- Баланс -->
-  <div class="balance" id="balance">Баланс: 1.000.000.000.000 сум</div>
 
-  <!-- Главное меню -->
-  <div class="nav-buttons" id="mainMenu">
-    <button onclick="openMarket()">🎮 Маркет</button>
-    <button onclick="openProfile()">👤 Профиль</button>
-    <button onclick="openSupport()">🛠 Поддержка</button>
-  </div>
+    <div class="cloud cloud-1"></div>
+    <div class="cloud cloud-2"></div>
+    <div class="cloud cloud-3"></div>
+    <div class="cloud cloud-4"></div>
+    <div class="cloud cloud-5"></div>
+    <div class="cloud cloud-6"></div>
 
-  <!-- Основной контейнер -->
-  <div class="container">
-    <!-- Список игр -->
-    <div class="game-list" id="gameList"></div>
+    <div class="star" style="top: 12%; left: 5%;">✨</div>
+    <div class="star" style="top: 25%; right: 7%; animation-delay: 0.8s;">🌟</div>
+    <div class="star" style="bottom: 18%; left: 12%; animation-delay: 0.3s;">✨</div>
+    <div class="star" style="bottom: 28%; right: 15%; animation-delay: 1.2s;">⭐</div>
+    <div class="star" style="top: 45%; left: 3%; animation-delay: 0.5s;">✨</div>
 
-    <!-- Детали игры -->
-    <div class="game-detail" id="gameDetail">
-      <div class="game-detail-content">
-        <button class="back-button" onclick="goBackToMarket()">← Назад к играм</button>
+    <div class="container">
+        <img class="hero-photo" src="https://i.postimg.cc/5NvzBMZm/k21k2.webp" alt="A and X" onerror="this.style.display='none'">
+        <div class="initials">A & X</div>
+        <div class="subtitle">TAKLIFNOMA</div>
         
-        <img id="detailImage" src="" alt="Game Image">
-        <h2 id="detailTitle"></h2>
-        <p id="detailDescription"></p>
-
-        <div class="seller-info" onclick="showSellerDescription()">
-          <div class="seller-info-content">
-            <div class="seller-info-left">
-              <img id="sellerAvatar" class="avatar" src="" alt="Avatar">
-              <div>
-                <div class="seller-name" id="sellerName">Иван Продавец</div>
-                <div class="rating" id="sellerRating">★ 4.8 (124 отзыва)</div>
-              </div>
-            </div>
-            <div class="price" id="gamePrice">99₽</div>
-          </div>
+        <div class="btn-group">
+            <a href="osh.html" class="btn btn-osh">
+                <span class="btn-icon">🍚</span> Osh (Plov)
+            </a>
+            <a href="navkar.html" class="btn btn-toy">
+                <span class="btn-icon">💍</span> Navkar (location)
+            </a>
+            <a href="choyxona.html" class="btn btn-choyxona">
+                <span class="btn-icon">🍵</span> Choyxona
+            </a>
         </div>
-
-        <!-- Детали продавца -->
-        <div class="seller-description" id="sellerDescription">
-          <h3>👤 Информация о продавце</h3>
-          <p>Опытный продавец игровой валюты с 2018 года. Гарантия быстрой доставки и надежности.</p>
-          
-          <div class="seller-stats">
-            <div class="stat-item">
-              <div class="stat-value" id="sellerSales">1.2K</div>
-              <div class="stat-label">Продаж</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-value" id="sellerRatingValue">4.8</div>
-              <div class="stat-label">Рейтинг</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-value" id="sellerResponse">5 мин</div>
-              <div class="stat-label">Среднее время ответа</div>
-            </div>
-          </div>
-
-          <h3>📝 Описание товара</h3>
-          <p id="productDescription">🌟 Купите игровую валюту по лучшей цене! Гарантия быстрой доставки в течение 15 минут после оплаты. Полная поддержка 24/7.</p>
-
-          <div class="action-buttons">
-            <button onclick="startChat()">💬 Написать продавцу</button>
-            <button onclick="buyGame()" style="background: linear-gradient(90deg, #00ff88, #00cc66);">💰 Купить сейчас</button>
-            <button onclick="addToFavorites()" style="background: linear-gradient(90deg, #ffcc00, #ff9900);">⭐ В избранное</button>
-          </div>
+        
+        <div class="footer-text">
+            ✨ Marhamat, tanlang va taklifnomamizni oching ✨
         </div>
-      </div>
     </div>
-
-    <!-- Личный кабинет -->
-    <div class="profile" id="profileSection">
-      <div class="profile-header">
-        <button class="back-button" onclick="goBackToMenu()">← Назад в меню</button>
-        
-        <img id="userPhoto" class="user-avatar" src="https://via.placeholder.com/100" alt="User Photo">
-        <h2 id="userName">Алексей Геймер</h2>
-        <p id="userEmail">gamer@example.com</p>
-        
-        <div class="balance-display">
-          <div>Ваш баланс</div>
-          <div class="balance-amount" id="userBalance"> 1000 сум</div>
-        </div>
-      </div>
-
-      <div class="profile-sections">
-        <div class="section-card">
-          <h3>💳 Пополнение счета</h3>
-          <p>Пополните баланс для покупок</p>
-          <button onclick="openCardSection()" style="width: 100%; margin-top: 10px;">➕ Пополнить</button>
-        </div>
-
-        <div class="section-card">
-          <h3>📜 История операций</h3>
-          <div id="transactionHistory">
-          </div>
-          <button onclick="showFullHistory()" style="width: 100%; margin-top: 10px;">📖 Вся история</button>
-        </div>
-
-        <div class="section-card">
-          <h3>⭐ Избранное</h3>
-          <div id="favoritesList">
-            <div class="favorite-item">PUBG Mobile - UC</div>
-            <div class="favorite-item">Free Fire - Алмазы</div>
-          </div>
-        </div>
-
-        <div class="section-card">
-          <h3>⚙️ Настройки</h3>
-          <button onclick="changeAvatar()" style="width: 100%; margin: 5px 0;">🖼️ Сменить аватар</button>
-          <button onclick="changePassword()" style="width: 100%; margin: 5px 0;">🔒 Сменить пароль</button>
-          <button onclick="logout()" style="width: 100%; margin: 5px 0; background: #d9534f;">🚪 Выйти</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Чат с продавцом -->
-    <div class="chat-container" id="chatContainer">
-      <div class="chat-box">
-        <div class="chat-header">
-          <h3>💬 Чат с продавцом</h3>
-          <button onclick="closeChat()" style="background: #d9534f; padding: 8px 15px;">✕ Закрыть</button>
-        </div>
-        
-        <div class="chat-messages" id="chatMessages">
-          <div class="message seller">
-            <strong>Продавец:</strong> Здравствуйте! Чем могу помочь?
-          </div>
-          <div class="message user">
-            <strong>Вы:</strong> Здравствуйте! Интересует покупка UC
-          </div>
-          <div class="message seller">
-            <strong>Продавец:</strong> Отлично! Сколько UC вам нужно?
-          </div>
-        </div>
-        
-        <div class="chat-input">
-          <input type="text" id="chatInput" placeholder="Введите сообщение..." onkeypress="sendMessageOnEnter(event)">
-          <button onclick="sendMessage()">📤</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Кнопка поддержки -->
-  <div class="support-button" onclick="openTelegramChat()">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/55/Telegram_icon_%282019%29.svg/1200px-Telegram_icon_%282019%29.svg.png" alt="Support">
-  </div>
-
-  <script>
-    // База данных игр
-    const games = [
-      {
-        title: "PUBG Mobile",
-        image: "https://upload.wikimedia.org/wikipedia/ru/7/7e/PlayerUnknown%27s_Battlegrounds_Mobile.jpg",
-        description: "Популярный мобильный шутер с королевской битвой. Купите UC для получения игровых преимуществ.",
-        price: "12.000 сум",
-        sellerAvatar: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/500px-Unknown_person.jpg",
-        sellerName: "PUBG",
-        rating: "★ 4.8 (124 отзыва)",
-        sales: "1.2K",
-        response: "5 мин"
-      },
-      {
-        title: "Free Fire",
-        image: "https://cdn-bgp.bluestacks.com/BGP/ru/gametiles_com.dts.freefireth.jpg",
-        description: "Экшн игра с короткими матчами и быстрой динамикой. Алмазы для покупки скинов и предметов.",
-        price: "10 сум",
-        sellerAvatar: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/500px-Unknown_person.jpg",
-        sellerName: "FREE",
-        rating: "★ 4.7 (89 отзывов)",
-        sales: "890",
-        response: "3 мин"
-      },
-      {
-        title: "Mobile Legends",
-        image: "https://images.unsplash.com/photo-1542751371-adc38448a05e?w=400",
-        description: "MOBA на мобилке с множеством героев. Купите алмазы для новых героев и скинов.",
-        price: "109 сум",
-        sellerAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100",
-        sellerName: "Алексей Легенда",
-        rating: "★ 4.9 (156 отзывов)",
-        sales: "1.5K",
-        response: "2 мин"
-      },
-      {
-        title: "Fortnite",
-        image: "https://cdn2.unrealengine.com/the-future-of-fortnite-is-here-1920x1080-fd281a65c8ef.jpg",
-        description: "V-Bucks для покупки боевого пропуска и косметических предметов.",
-        price: "10.000сум",
-        sellerAvatar: "https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Unknown_person.jpg/500px-Unknown_person.jpg",
-        sellerName: "Форнайт",
-        rating: "★ 4.8 (267 отзывов)",
-        sales: "1.8K",
-        response: "6 мин"
-      },
-    ];
-
-    // Глобальные переменные
-    let currentGameIndex = 0;
-    let userBalance = 5000;
-
-    // Инициализация
-    document.addEventListener('DOMContentLoaded', function() {
-      updateBalanceDisplay();
-      openMarket();
-    });
-
-    // Обновление баланса
-    function updateBalanceDisplay() {
-      document.getElementById('balance').textContent = `Баланс: ${userBalance.toLocaleString()} ₽`;
-      document.getElementById('userBalance').textContent = `${userBalance.toLocaleString()} ₽`;
-    }
-
-    // Открыть маркет
-    function openMarket() {
-      hideAllSections();
-      document.getElementById('mainMenu').style.display = 'flex';
-      
-      const list = document.getElementById('gameList');
-      list.innerHTML = games.map((game, i) => `
-        <div class="game" onclick="showGameDetail(${i})">
-          <img src="${game.image}" alt="${game.title}">
-          <h3>${game.title}</h3>
-          <div class="game-price">${game.price}</div>
-          <div style="font-size: 12px; color: #aaa; margin-top: 5px;">${game.description.substring(0, 50)}...</div>
-        </div>
-      `).join('');
-      
-      list.style.display = 'grid';
-    }
-
-    // Показать детали игры
-    function showGameDetail(index) {
-      currentGameIndex = index;
-      const game = games[index];
-      
-      hideAllSections();
-      document.getElementById('gameDetail').style.display = 'block';
-      
-      document.getElementById('detailImage').src = game.image;
-      document.getElementById('detailTitle').textContent = game.title;
-      document.getElementById('detailDescription').textContent = game.description;
-      document.getElementById('gamePrice').textContent = game.price;
-      document.getElementById('sellerAvatar').src = game.sellerAvatar;
-      document.getElementById('sellerName').textContent = game.sellerName;
-      document.getElementById('sellerRating').textContent = game.rating;
-      document.getElementById('sellerSales').textContent = game.sales;
-      document.getElementById('sellerRatingValue').textContent = game.rating.split(' ')[0];
-      document.getElementById('sellerResponse').textContent = game.response;
-    }
-
-    // Показать информацию о продавце
-    function showSellerDescription() {
-      document.getElementById('sellerDescription').style.display = 'block';
-    }
-
-    // Скрыть все секции
-    function hideAllSections() {
-      document.getElementById('gameList').style.display = 'none';
-      document.getElementById('gameDetail').style.display = 'none';
-      document.getElementById('sellerDescription').style.display = 'none';
-      document.getElementById('profileSection').style.display = 'none';
-      document.getElementById('chatContainer').style.display = 'none';
-      document.getElementById('mainMenu').style.display = 'none';
-    }
-
-    // Вернуться в маркет
-    function goBackToMarket() {
-      openMarket();
-    }
-
-    // Открыть профиль
-    function openProfile() {
-      hideAllSections();
-      document.getElementById('profileSection').style.display = 'block';
-    }
-
-    // Вернуться в меню
-    function goBackToMenu() {
-      hideAllSections();
-      document.getElementById('mainMenu').style.display = 'flex';
-    }
-
-    // Открыть раздел с картой
-    function openCardSection() {
-      alert('Пополнение баланса:\nКарта: 0000 0000 0000 0000\nПосле оплаты деньги поступят в течение 5 минут.');
-    }
-
-    // Купить игру
-    function buyGame() {
-      const game = games[currentGameIndex];
-      const price = parseInt(game.price);
-      
-      if (userBalance >= price) {
-        if (confirm(`Купить "${game.title}" за ${game.price}?`)) {
-          userBalance -= price;
-          updateBalanceDisplay();
-          
-          // Добавляем транзакцию в историю
-          const history = document.getElementById('transactionHistory');
-          const transaction = document.createElement('div');
-          transaction.className = 'transaction';
-          transaction.textContent = `Покупка ${game.title} - ${game.price}`;
-          history.insertBefore(transaction, history.firstChild);
-          
-          alert('✅ Покупка успешна! Свяжитесь с продавцом для получения товара.');
-          startChat();
-        }
-      } else {
-        alert('❌ Недостаточно средств на балансе. Пополните счет.');
-        openCardSection();
-      }
-    }
-
-    // Открыть чат
-    function startChat() {
-      hideAllSections();
-      document.getElementById('chatContainer').style.display = 'block';
-    }
-
-    // Закрыть чат
-    function closeChat() {
-      openMarket();
-    }
-
-    // Отправить сообщение
-    function sendMessage() {
-      const input = document.getElementById('chatInput');
-      const message = input.value.trim();
-      
-      if (message) {
-        const messages = document.getElementById('chatMessages');
-        
-        // Сообщение пользователя
-        const userMsg = document.createElement('div');
-        userMsg.className = 'message user';
-        userMsg.innerHTML = `<strong>Вы:</strong> ${message}`;
-        messages.appendChild(userMsg);
-        
-        // Очистка поля ввода
-        input.value = '';
-        
-        // Автоответ продавца (через 1 секунду)
-        setTimeout(() => {
-          const responses = [
-            "Понял вас! Можем оформить заказ.",
-            "Отличный выбор! Доставка в течение 15 минут.",
-            "Сколько единиц валюты вам нужно?",
-            "Готов помочь с покупкой!"
-          ];
-          const response = responses[Math.floor(Math.random() * responses.length)];
-          
-          const sellerMsg = document.createElement('div');
-          sellerMsg.className = 'message seller';
-          sellerMsg.innerHTML = `<strong>Продавец:</strong> ${response}`;
-          messages.appendChild(sellerMsg);
-          
-          // Прокрутка вниз
-          messages.scrollTop = messages.scrollHeight;
-        }, 1000);
-        
-        // Прокрутка вниз
-        messages.scrollTop = messages.scrollHeight;
-      }
-    }
-
-    // Отправить сообщение по Enter
-    function sendMessageOnEnter(event) {
-      if (event.key === 'Enter') {
-        sendMessage();
-      }
-    }
-
-    // Добавить в избранное
-    function addToFavorites() {
-      const game = games[currentGameIndex];
-      const favorites = document.getElementById('favoritesList');
-      const item = document.createElement('div');
-      item.className = 'favorite-item';
-      item.textContent = `${game.title} - ${game.price}`;
-      favorites.appendChild(item);
-      alert(`✅ "${game.title}" добавлено в избранное!`);
-    }
-
-    // Открыть поддержку
-    function openSupport() {
-      alert('📞 Техническая поддержка:\nEmail: ddimonov461@gmai.com \nТелеграм: @Dma12r t\nРаботаем 24/7');
-    }
-
-    // Открыть Telegram
-    function openTelegramChat() {
-      window.open('https://t.me/your_telegram_bot', '_blank');
-    }
-
-    // Сменить аватар
-    function changeAvatar() {
-      alert('Функция смены аватара в разработке');
-    }
-
-    // Сменить пароль
-    function changePassword() {
-      const newPass = prompt('Введите новый пароль:');
-      if (newPass && newPass.length >= 6) {
-        alert('✅ Пароль успешно изменен!');
-      } else if (newPass) {
-        alert('❌ Пароль должен содержать минимум 6 символов');
-      }
-    }
-
-    // Показать полную историю
-    function showFullHistory() {
-      alert('📖 Полная история операций:\n1. Покупка PUBG UC - 500 ₽\n2. Пополнение счета + 2 000 ₽\n3. Покупка Free Fire - 350 ₽\n4. Пополнение счета + 3 000 ₽\n5. Покупка Mobile Legends - 450 ₽');
-    }
-
-    // Выйти из аккаунта
-    function logout() {
-      if (confirm('Вы уверены, что хотите выйти?')) {
-        alert('Вы успешно вышли из аккаунта');
-        openMarket();
-      }
-    }
-  </script>
 </body>
 </html>
